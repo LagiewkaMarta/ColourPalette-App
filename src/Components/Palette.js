@@ -17,28 +17,30 @@ export default class Palette extends Component {
     });
   };
 
-  handleSelectChange = (format) => {
+  handleSelectChange = format => {
     this.setState({
       format
-    })
-  }
+    });
+  };
   render() {
     const { level, format } = this.state;
-    const { colors } = this.props.palette;
+    const { colors, paletteName, emoji } = this.props.palette;
 
     const colorBoxes = colors[level].map(color => (
-      <ColorBox name={color.name} background={color[format]} />
+      <ColorBox key={color.id }name={color.name} background={color[format]} />
     ));
     return (
       <div className="Palette">
-        {/* Navbar goes here */}
-        <Navbar value={level} handleSliderChange={this.handleSliderChange} handleSelectChange={this.handleSelectChange}/>
+        <Navbar
+          value={level}
+          handleSliderChange={this.handleSliderChange}
+          handleSelectChange={this.handleSelectChange}
+        />
 
-        <div className="Palette-colors">
-          {/* color boxes go here */}
-          {colorBoxes}
-        </div>
-        {/* Footer goes here */}
+        <div className="Palette-colors">{colorBoxes}</div>
+        <footer className="Palette-footer">{paletteName}
+        <span className="emoji">{emoji}</span>
+        </footer>
       </div>
     );
   }
