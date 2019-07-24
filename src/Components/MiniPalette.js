@@ -43,7 +43,7 @@ const styles = {
     marginBottom: "-3.5px"
   }
 };
-function MiniPalette({ classes, paletteName, emoji, colors }) {
+function MiniPalette({ classes, paletteName, emoji, colors, id, handleClick }) {
   const miniColorBoxes = colors.map(color => (
     <div
       className={classes.miniColor}
@@ -52,7 +52,7 @@ function MiniPalette({ classes, paletteName, emoji, colors }) {
     />
   ));
   return (
-    <div className={classes.root}>
+    <div className={classes.root} onClick={() => handleClick(id)}>
       <div className={classes.colors}>{miniColorBoxes}</div>
       <h5 className={classes.title}>
         {paletteName} <span className={classes.emoji}>{emoji}</span>
