@@ -36,27 +36,29 @@ export default class Navbar extends Component {
     });
   };
   render() {
-    const { value, handleSliderChange } = this.props;
+    const { value, handleSliderChange, showSlider } = this.props;
     const { format, open } = this.state;
     return (
       <header className="Navbar">
         <div className="logo">
           <Link to="/">reactcolorpicker</Link>
         </div>
-        <div className="slider-container">
-          <span>Level: {value}</span>
-          <div className="slider">
-            {" "}
-            <Slider
-              dots
-              defaultValue={value}
-              min={100}
-              max={900}
-              step={100}
-              onChange={handleSliderChange}
-            />
+        {showSlider && (
+          <div className="slider-container">
+            <span>Level: {value}</span>
+            <div className="slider">
+              {" "}
+              <Slider
+                dots
+                defaultValue={value}
+                min={100}
+                max={900}
+                step={100}
+                onChange={handleSliderChange}
+              />
+            </div>
           </div>
-        </div>
+        )}
         <div className="select-container">
           <Select value={format} onChange={this.handleFormatChange}>
             <MenuItem value="hex">HEX - #ffffff</MenuItem>
@@ -69,12 +71,21 @@ export default class Navbar extends Component {
           open={open}
           onClose={this.handleClose}
           autoHideDuration={2000}
-          message={<span id="message-id">Format Changed to {format.toUpperCase()}!</span>}
+          message={
+            <span id="message-id">
+              Format Changed to {format.toUpperCase()}!
+            </span>
+          }
           ContentProps={{
             "aria-describedby": "message-id"
           }}
           action={[
-            <IconButton onClick={this.handleClose} key="close" aria-label="Close" color="inherit">
+            <IconButton
+              onClick={this.handleClose}
+              key="close"
+              aria-label="Close"
+              color="inherit"
+            >
               <CloseIcon />
             </IconButton>
           ]}
