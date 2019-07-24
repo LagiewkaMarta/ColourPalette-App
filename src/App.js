@@ -17,7 +17,9 @@ function App() {
       <Route
         exact
         path="/"
-        render={(routeParams) => <PaletteList palettes={seedColors} {...routeParams} />}
+        render={routeParams => (
+          <PaletteList palettes={seedColors} {...routeParams} />
+        )}
       />
       <Route
         exact
@@ -27,6 +29,11 @@ function App() {
             palette={generatePalette(findPalette(routeParams.match.params.id))}
           />
         )}
+      />
+      <Route
+        exact
+        path="/palette/:paletteId/:colorId"
+        render={() => <p>SCP</p>}
       />
     </Switch>
   );
