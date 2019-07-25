@@ -52,6 +52,16 @@
   font-size: 12px;
 }
 
+.light-text {
+  color: #fff;
+}
+.ColorBox .dark-text {
+  color: rgba(0,0,0,.5);
+}
+.dark-text {
+  color: rgba(0,0,0,.5);
+}
+
 .see-more {
   background: rgba(255, 255, 255, 0.3);
   position: absolute;
