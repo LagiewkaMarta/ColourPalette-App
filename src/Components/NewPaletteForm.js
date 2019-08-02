@@ -76,7 +76,9 @@ const styles = theme => ({
 
 class NewPaletteForm extends React.Component {
   state = {
-    open: false
+    open: false,
+    currentColor: "palevioletred",
+    colors: ["purple", "#e15764"]
   };
 
   handleDrawerOpen = () => {
@@ -87,6 +89,18 @@ class NewPaletteForm extends React.Component {
     this.setState({ open: false });
   };
 
+  updateCurrentColor = newColor => {
+    console.log(newColor.hex);
+    this.setState({
+      currentColor: newColor.hex
+    });
+  };
+
+  addNewColor = () => {
+    this.setState(prevState => ({
+      colors: [...prevState.colors, this.state.currentColor]
+    }));
+  };
   render() {
     const { classes, theme } = this.props;
     const { open } = this.state;
@@ -125,30 +139,45 @@ class NewPaletteForm extends React.Component {
         >
           <div className={classes.drawerHeader}>
             <IconButton onClick={this.handleDrawerClose}>
-              {theme.direction === "ltr" ? (
-                <ChevronLeftIcon />
-              ) : (
-                <ChevronRightIcon />
-              )}
+              <ChevronLeftIcon />
             </IconButton>
           </div>
           <Divider />
+
           <Typography variant="h4"> Design Your Palette </Typography>
           <div>
-          <Button variant="contained" color="secondary">Clear Palette</Button>
-          <Button variant="contained" color="primary">Random Color</Button>
+            <Button variant="contained" color="secondary">
+              Clear Palette
+            </Button>
+            <Button variant="contained" color="primary">
+              Random Color
+            </Button>
           </div>
           <ChromePicker
-            color="purple"
-            onChangeComplete={newColor => console.log(newColor)}
+            color={this.state.currentColor}
+            onChangeComplete={this.updateCurrentColor}
           />
-          <Button variant="contained" color="primary"> Add Color </Button>
+          <Button
+            variant="contained"
+            color="primary"
+            style={{ backgroundColor: this.state.currentColor }}
+            onClick={this.addNewColor}
+          >
+            {" "}
+            Add Color{" "}
+          </Button>
+          </Drawer>
           <main
             className={classNames(classes.content, {
               [classes.contentShift]: open
             })}
-          />
-        </Drawer>
+          >
+            <div className={classes.drawerHeader} />
+            <ul>
+            {this.state.colors.map(c => <li style={{backgroundColor: c}}>{c}</li>)}
+           
+            </ul>
+          </main>
       </div>
     );
   }
