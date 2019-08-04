@@ -104,7 +104,7 @@ class NewPaletteForm extends React.Component {
 
   updateCurrentColor = newColor => {
     // console.log(newColor.hex);
-    this.setState({
+    this.setState({ 
       currentColor: newColor.hex
     });
   };
