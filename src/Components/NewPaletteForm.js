@@ -10,6 +10,8 @@ import Divider from "@material-ui/core/Divider";
 import IconButton from "@material-ui/core/IconButton";
 import MenuIcon from "@material-ui/icons/Menu";
 import ChevronLeftIcon from "@material-ui/icons/ChevronLeft";
+// form validator
+import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 // color picker
 import { ChromePicker } from "react-color";
 import { Button } from "@material-ui/core";
@@ -78,9 +80,19 @@ const styles = theme => ({
 class NewPaletteForm extends React.Component {
   state = {
     open: false,
-    currentColor: "palevioletred",
-    colors: ["purple", "#e15764"]
+    currentColor: "",
+    colors: [],
+    newName: ""
   };
+
+  componentDidMount() {
+    ValidatorForm.addValidationRule("isColorNameUnique", value =>
+      this.state.colors.every(({name}) => name.toLowerCase() !== value.toLowerCase())
+    );
+    ValidatorForm.addValidationRule("isColorUnique", value =>
+      this.state.colors.every(({color}) => color !== this.state.currentColor)
+    );
+  }
 
   handleDrawerOpen = () => {
     this.setState({ open: true });
@@ -91,20 +103,31 @@ class NewPaletteForm extends React.Component {
   };
 
   updateCurrentColor = newColor => {
-    console.log(newColor.hex);
+    // console.log(newColor.hex);
     this.setState({
       currentColor: newColor.hex
     });
   };
 
   addNewColor = () => {
+    const newColor = {
+      color: this.state.currentColor,
+      name: this.state.newName
+    };
     this.setState(prevState => ({
-      colors: [...prevState.colors, this.state.currentColor]
+      colors: [...prevState.colors, newColor],
+      newName: ""
     }));
+  };
+
+  handleChange = e => {
+    this.setState({
+      newName: e.target.value
+    });
   };
   render() {
     const { classes, theme } = this.props;
-    const { open } = this.state;
+    const { open, newName } = this.state;
 
     return (
       <div className={classes.root}>
@@ -158,24 +181,38 @@ class NewPaletteForm extends React.Component {
             color={this.state.currentColor}
             onChangeComplete={this.updateCurrentColor}
           />
-          <Button
-            variant="contained"
-            color="primary"
-            style={{ backgroundColor: this.state.currentColor }}
-            onClick={this.addNewColor}
-          >
-            {" "}
-            Add Color{" "}
-          </Button>
-          </Drawer>
-          <main
-            className={classNames(classes.content, {
-              [classes.contentShift]: open
-            })}
-          >
-            <div className={classes.drawerHeader} />
-            {this.state.colors.map(c => <DraggableColorBox key={c} color={c}></DraggableColorBox>)}
-          </main>
+          <ValidatorForm onSubmit={this.addNewColor}>
+            <TextValidator
+              value={newName}
+              onChange={this.handleChange}
+              validators={["required", "isColorNameUnique", "isColorUnique"]}
+              errorMessages={[
+                "this field is required",
+                "color name must be unique",
+                "color already used"
+              ]}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              style={{ backgroundColor: this.state.currentColor }}
+              type="submit"
+            >
+              {" "}
+              Add Color{" "}
+            </Button>
+          </ValidatorForm>
+        </Drawer>
+        <main
+          className={classNames(classes.content, {
+            [classes.contentShift]: open
+          })}
+        >
+          <div className={classes.drawerHeader} />
+          {this.state.colors.map(c => (
+            <DraggableColorBox key={c.color} color={c.color} name={c.name} />
+          ))}
+        </main>
       </div>
     );
   }
