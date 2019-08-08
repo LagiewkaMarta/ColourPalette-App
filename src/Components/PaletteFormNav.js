@@ -18,7 +18,7 @@ import { Button } from "@material-ui/core";
 
 export default class PaletteFormNav extends Component {
     state = {
-        newPaletteName: ""
+        newPaletteName: "",
     }
 
     componentDidMount(){
