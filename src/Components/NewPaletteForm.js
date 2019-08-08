@@ -16,6 +16,10 @@ import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { ChromePicker } from "react-color";
 import { Button } from "@material-ui/core";
 import DraggableColorBox from "./DraggableColorBox";
+import DraggableColorList from "./DraggableColorList";
+
+import arrayMove from "array-move";
+
 
 const drawerWidth = 400;
 
@@ -96,7 +100,9 @@ class NewPaletteForm extends React.Component {
       this.state.colors.every(({ color }) => color !== this.state.currentColor)
     );
     ValidatorForm.addValidationRule("isPaletteNameUnique", value =>
-      this.props.palettes.every(({ paletteName }) => paletteName.toLowerCase() !== value.toLowerCase())
+      this.props.palettes.every(
+        ({ paletteName }) => paletteName.toLowerCase() !== value.toLowerCase()
+      )
     );
   }
 
@@ -141,14 +147,22 @@ class NewPaletteForm extends React.Component {
   handleChange = e => {
     this.setState({
       [e.target.name]: e.target.value
-        });
+    });
   };
 
-  handleDeleteColor = (name) => {
+  handleDeleteColor = name => {
     this.setState({
       colors: this.state.colors.filter(color => color.name !== name)
-    })
-  }
+    });
+  };
+
+  onSortEnd = ({oldIndex, newIndex}) => {
+    this.setState(({colors}) => ({
+      colors: arrayMove(colors, oldIndex, newIndex),
+    }));
+  };
+
+
   render() {
     const { classes, theme } = this.props;
     const { open, newName } = this.state;
@@ -181,16 +195,10 @@ class NewPaletteForm extends React.Component {
                 label="Palette Name"
                 value={this.state.newPaletteName}
                 onChange={this.handleChange}
-                validators = {[
-"required", "isPaletteNameUnique"
-                ]}
-                errorMessages ={["Enter Palette Name", "Name already taken"] }
+                validators={["required", "isPaletteNameUnique"]}
+                errorMessages={["Enter Palette Name", "Name already taken"]}
               />
-              <Button
-                variant="contained"
-                color="primary"
-                type="submit"
-              >
+              <Button variant="contained" color="primary" type="submit">
                 Save Palette
               </Button>
             </ValidatorForm>
@@ -254,9 +262,12 @@ class NewPaletteForm extends React.Component {
           })}
         >
           <div className={classes.drawerHeader} />
-          {this.state.colors.map(c => (
-            <DraggableColorBox key={c.color} color={c.color} name={c.name} handleDeleteColor={this.handleDeleteColor}/>
-          ))}
+          <DraggableColorList
+            colors={this.state.colors}
+            handleDeleteColor={this.handleDeleteColor}
+            axis="xy"
+            onSortEnd={this.onSortEnd}
+          />
         </main>
       </div>
     );
