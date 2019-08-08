@@ -13,7 +13,7 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      palettes : seedColors
+      palettes: seedColors
     };
   }
 
@@ -25,7 +25,7 @@ class App extends Component {
   savePalette = newPalette => {
     this.setState({
       palettes: [...this.state.palettes, newPalette]
-    })
+    });
   };
   render() {
     return (
@@ -33,7 +33,13 @@ class App extends Component {
         <Route
           exact
           path="/palette/new"
-          render={(routeParams) => <NewPaletteForm savePalette={this.savePalette} {...routeParams} />}
+          render={routeParams => (
+            <NewPaletteForm
+              palettes={this.state.palettes}
+              savePalette={this.savePalette}
+              {...routeParams}
+            />
+          )}
         />
         <Route
           exact
