@@ -87,10 +87,12 @@ class NewPaletteForm extends React.Component {
 
   componentDidMount() {
     ValidatorForm.addValidationRule("isColorNameUnique", value =>
-      this.state.colors.every(({name}) => name.toLowerCase() !== value.toLowerCase())
+      this.state.colors.every(
+        ({ name }) => name.toLowerCase() !== value.toLowerCase()
+      )
     );
     ValidatorForm.addValidationRule("isColorUnique", value =>
-      this.state.colors.every(({color}) => color !== this.state.currentColor)
+      this.state.colors.every(({ color }) => color !== this.state.currentColor)
     );
   }
 
@@ -103,11 +105,24 @@ class NewPaletteForm extends React.Component {
   };
 
   updateCurrentColor = newColor => {
-    // console.log(newColor.hex);
-    this.setState({ 
+    this.setState({
       currentColor: newColor.hex
     });
   };
+
+handleSubmit = () => {
+  let newName = "New Test Palette";
+
+  let Palette = {
+    paletteName: newName,
+    colors: this.state.colors,
+    id: newName.toLowerCase().replace(/ /g, "-")
+    };
+    
+  this.props.savePalette(Palette);
+  this.props.history.push("/")
+}
+
 
   addNewColor = () => {
     const newColor = {
@@ -134,6 +149,7 @@ class NewPaletteForm extends React.Component {
         <CssBaseline />
         <AppBar
           position="fixed"
+          color="default"
           className={classNames(classes.appBar, {
             [classes.appBarShift]: open
           })}
@@ -150,6 +166,13 @@ class NewPaletteForm extends React.Component {
             <Typography variant="h6" color="inherit" noWrap>
               Persistent drawer
             </Typography>
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={this.handleSubmit}
+            >
+              Save Palette
+            </Button>
           </Toolbar>
         </AppBar>
         <Drawer
