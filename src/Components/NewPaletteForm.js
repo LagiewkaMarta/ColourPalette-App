@@ -20,7 +20,6 @@ import DraggableColorList from "./DraggableColorList";
 
 import arrayMove from "array-move";
 
-
 const drawerWidth = 400;
 
 const styles = theme => ({
@@ -82,6 +81,9 @@ const styles = theme => ({
 });
 
 class NewPaletteForm extends React.Component {
+  static defaultProps = {
+    maxColors: 20
+  }
   state = {
     open: false,
     currentColor: "",
@@ -156,17 +158,32 @@ class NewPaletteForm extends React.Component {
     });
   };
 
-  onSortEnd = ({oldIndex, newIndex}) => {
-    this.setState(({colors}) => ({
-      colors: arrayMove(colors, oldIndex, newIndex),
+  onSortEnd = ({ oldIndex, newIndex }) => {
+    this.setState(({ colors }) => ({
+      colors: arrayMove(colors, oldIndex, newIndex)
     }));
   };
 
-
+  clearColors = () => {
+    this.setState({
+      colors: []
+    });
+  };
+  addRandomColor = () => {
+    let allColors = this.props.palettes.map(p => p.colors).flat();
+    let randClr = Math.floor(Math.random() * allColors.length);
+    let pickedClr = allColors[randClr];
+    //making sure we don't add a duplicate color
+    if (this.state.colors.every(color => color.name !== pickedClr.name)) {
+      this.setState({
+        colors: [...this.state.colors, pickedClr]
+      });
+    }
+  };
   render() {
-    const { classes, theme } = this.props;
-    const { open, newName } = this.state;
-
+    const { classes, maxColors } = this.props;
+    const { open, newName, colors } = this.state;
+    const paletteFull = colors.length >= maxColors
     return (
       <div className={classes.root}>
         <CssBaseline />
@@ -222,10 +239,19 @@ class NewPaletteForm extends React.Component {
 
           <Typography variant="h4"> Design Your Palette </Typography>
           <div>
-            <Button variant="contained" color="secondary">
+            <Button
+              variant="contained"
+              color="secondary"
+              onClick={this.clearColors}
+            >
               Clear Palette
             </Button>
-            <Button variant="contained" color="primary">
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={this.addRandomColor}
+              disabled={paletteFull}
+            >
               Random Color
             </Button>
           </div>
@@ -250,9 +276,10 @@ class NewPaletteForm extends React.Component {
               color="primary"
               style={{ backgroundColor: this.state.currentColor }}
               type="submit"
+              disabled={paletteFull}
             >
               {" "}
-              Add Color{" "}
+              {paletteFull ? "Palette Full" : "Add Color"}
             </Button>
           </ValidatorForm>
         </Drawer>
