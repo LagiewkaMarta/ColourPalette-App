@@ -4,10 +4,8 @@ import { ValidatorForm, TextValidator } from "react-material-ui-form-validator";
 import { ChromePicker } from "react-color";
 import { withStyles } from "@material-ui/core/styles";
 
-
 const styles = {
   picker: {
-    width: "100% !important",
     marginTop: "2rem"
   },
   addColor: {
@@ -36,14 +34,14 @@ class ColorPickerForm extends Component {
       this.props.colors.every(({ color }) => color !== this.state.currentColor)
     );
   }
-  updateCurrentColor = (newColor) => {
+  updateCurrentColor = newColor => {
     this.setState({ currentColor: newColor.hex });
-  }
-  handleChange = (evt) => {
+  };
+  handleChange = evt => {
     this.setState({
       [evt.target.name]: evt.target.value
     });
-  }
+  };
   handleSubmit = () => {
     const newColor = {
       color: this.state.currentColor,
@@ -51,7 +49,7 @@ class ColorPickerForm extends Component {
     };
     this.props.addNewColor(newColor);
     this.setState({ newColorName: "" });
-  }
+  };
 
   render() {
     const { paletteIsFull, classes } = this.props;
@@ -59,14 +57,15 @@ class ColorPickerForm extends Component {
     return (
       <div>
         <ChromePicker
+          width="100%"
           color={currentColor}
           onChangeComplete={this.updateCurrentColor}
           className={classes.picker}
         />
-        <ValidatorForm onSubmit={this.handleSubmit} ref='form'>
+        <ValidatorForm onSubmit={this.handleSubmit} ref="form">
           <TextValidator
             value={newColorName}
-            name='newColorName'
+            name="newColorName"
             onChange={this.handleChange}
             validators={["required", "isColorNameUnique", "isColorUnique"]}
             errorMessages={[
@@ -75,15 +74,15 @@ class ColorPickerForm extends Component {
               "Color already used!"
             ]}
             className={classes.colorNameInput}
-            placeholder='Color Name'
-            variant='filled'
-            margin='normal'
+            placeholder="Color Name"
+            variant="filled"
+            margin="normal"
           />
           <Button
-            variant='contained'
-            type='submit'
+            variant="contained"
+            type="submit"
             className={classes.addColor}
-            color='primary'
+            color="primary"
             disabled={paletteIsFull}
             style={{
               backgroundColor: paletteIsFull ? "grey" : currentColor
