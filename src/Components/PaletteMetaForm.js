@@ -12,6 +12,7 @@ import "emoji-mart/css/emoji-mart.css";
 
 export default class PaletteMetaForm extends Component {
 	state = {
+    stage: "name",
 		open: true,
 		newPaletteName: '',
 	};
@@ -36,18 +37,31 @@ export default class PaletteMetaForm extends Component {
 		});
 	};
 
+  showEmojiPicker = () => {
+    this.setState({stage: "emoji"})
+  }
+
+  savePalette = (emoji) => {
+    this.props.handleSubmit({paletteName: this.state.newPaletteName, emoji: emoji.native})
+  }
+
 	render() {
 		const { newPaletteName } = this.state;
 		const { hideForm, handleSubmit } = this.props;
 		return (
-			<Dialog open={this.state.open} onClose={this.handleClose} aria-labelledby="form-dialog-title" onClose={hideForm}>
+      <>
+      <Dialog open={this.state.stage === "emoji"} onClose={this.handleClose}>
+      <DialogTitle id="form-dialog-title">Choose a Palette Emoji</DialogTitle>
+      <Picker onSelect={this.savePalette} title="Pick your emoji…" emoji="point_up" />
+      </Dialog>
+
+			<Dialog open={this.state.stage === "name"} onClose={this.handleClose} aria-labelledby="form-dialog-title" onClose={hideForm}>
 				<DialogTitle id="form-dialog-title">Choose a Palette Name</DialogTitle>
-				<ValidatorForm onSubmit={() => handleSubmit(newPaletteName)}>
+				<ValidatorForm onSubmit={this.showEmojiPicker}>
 					<DialogContent>
 						<DialogContentText>
 							Please enter a name for your new beautiful palette. Make sure it's unique!
 						</DialogContentText>
-            <Picker/>
 						<TextValidator
 							label="Palette Name"
 							value={newPaletteName}
@@ -69,6 +83,7 @@ export default class PaletteMetaForm extends Component {
 					</DialogActions>
 				</ValidatorForm>
 			</Dialog>
+      </>
 		);
 	}
 }
