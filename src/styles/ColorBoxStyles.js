@@ -16,11 +16,11 @@ export default {
       },
       [sizes.down("lg")]: {
         width: "25%",
-        height: props => (props.showingFullPalette ? "20%" : "50%")
+        height: props => (props.showingFullPalette ? "20%" : "33.333%")
       },
       [sizes.down("md")]: {
         width: "50%",
-        height: props => (props.showingFullPalette ? "10%" : "50%")
+        height: props => (props.showingFullPalette ? "10%" : "20%")
       },
       [sizes.down("xs")]: {
         width: "100%",
@@ -70,7 +70,7 @@ export default {
       lineHeight: "30px",
       textTransform: "uppercase",
       border: "none",
-      transition: "0.5s",
+      transition: ".5s",
       textDecoration: "none",
       opacity: 0
     },
@@ -87,18 +87,16 @@ export default {
     copyOverlay: {
       width: "100%",
       height: "100%",
-      top: 0,
-      left: 0,
-      position: "absolute",
-      zIndex: 0,
+      zIndex: "0",
       transition: "transform 0.6s ease-in-out",
       transform: "scale(0.1)",
-      opacity: 0,
+      opacity: "0",
     },
     showOverlay: {
-      transform: "scale(10)",
+      transform: "scale(50)",
       zIndex: 1,
-      opacity: 1
+      opacity: 1,
+      position: "absolute"
     },
     copyMessage: {
       position: "fixed",
@@ -122,7 +120,10 @@ export default {
         textAlign: "center",
         marginBottom: "0",
         padding: "1rem",
-        textTransform: "uppercase"
+        textTransform: "uppercase",
+        [sizes.down("xs")]: {
+          fontSize: "5rem"
+        }
       },
       "& p": {
         fontSize: "2rem",
