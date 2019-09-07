@@ -18,22 +18,14 @@ export default theme => ({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		height: '64px',
-		// [sizes.down("xs")]: {
-		// 	height: "30px"
-		// },
 	},
 	appBarShift: {
-		// width: `calc(100% - ${drawerWidth}px)`,
 		marginLeft: drawerWidth,
 		transition: theme.transitions.create(['margin', 'width'], {
 			easing: theme.transitions.easing.easeOut,
 			duration: theme.transitions.duration.enteringScreen,
 		}),
 	},
-
-
-	
-
 	navBtns: {
 		marginRight: '.5rem',
 		minWidth: '20vw',

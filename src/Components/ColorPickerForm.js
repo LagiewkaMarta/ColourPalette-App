@@ -8,7 +8,7 @@ import styles from "../styles/ColorPickerFormStyles.js";
 class ColorPickerForm extends Component {
   constructor(props) {
     super(props);
-    this.state = { currentColor: "", newColorName: "" };
+    this.state = { currentColor: "red", newColorName: "" };
   }
   componentDidMount() {
     ValidatorForm.addValidationRule("isColorNameUnique", value =>

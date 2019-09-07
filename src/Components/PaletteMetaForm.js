@@ -57,7 +57,6 @@ export default class PaletteMetaForm extends Component {
 
 				<Dialog
 					open={this.state.stage === 'name'}
-					onClose={this.handleClose}
 					aria-labelledby="form-dialog-title"
 					onClose={hideForm}
 				>
